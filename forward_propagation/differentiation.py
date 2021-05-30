@@ -43,3 +43,9 @@ class Dfloat:
     def __rdiv__(self, other):
         """Reverse division."""
         return self / other
+
+def sin(x):
+    if isinstance(x, Dfloat):
+        return Dfloat(math.sin(x.x), x.dx*math.cos(x.x))
+    else:
+        return Math.sin(x)
