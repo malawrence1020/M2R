@@ -44,8 +44,20 @@ class Dfloat:
         """Reverse division."""
         return self / other
 
-def sin(x):
-    if isinstance(x, Dfloat):
-        return Dfloat(math.sin(x.x), x.dx*math.cos(x.x))
-    else:
-        return Math.sin(x)
+    def sin(x):
+        if isinstance(x, Dfloat):
+            return Dfloat(math.sin(x.x), x.dx * math.cos(x.x))
+        else:
+            return math.sin(x)
+
+    def cos(x):
+        if isinstance(x, Dfloat):
+            return Dfloat(math.cos(x.x), -x.dx * math.sin(x.x))
+        else:
+            return math.cos(x)
+
+    def tan(x):
+        if isinstance(x, Dfloat):
+            return Dfloat(math.tan(x.x), x.dx * (1 + (math.tan(x.x))**2))
+        else:
+            return math.tan(x)
