@@ -3,12 +3,18 @@ import math
 from functools import wraps
 from numbers import Number
 
+
 def make_int_dfloat(meth):
     """Cast the second argument of a method to Dfloat when needed."""
     @wraps(meth)
     def fn(self, other):
-        if isinstance(other, Number):
-            other = Dfloat(other, 0)
+        if not isinstance(other, Dfloat):
+            if isinstance(other, Number):
+                other = Dfloat(other, 0)
+            else:
+                raise TypeError(
+                    (f"Can only operate on a Dfloat or a Number, "
+                     f"not a {type(other).__name__}"))
         return meth(self, other)
     return fn
 
@@ -23,7 +29,8 @@ class Dfloat:
 
     def __repr__(self):
         """Representation of Dfloat."""
-        return self.__class__.__name__ + "(" + str(self.x) + "," + str(self.dx) + ")"
+        return (self.__class__.__name__ + "(" + str(self.x) +
+                "," + str(self.dx) + ")")
 
     @make_int_dfloat
     def __add__(self, other):
@@ -80,6 +87,7 @@ class Dfloat:
 
 
 def sin(x):
+    """Define sin for Dfloat, else use math.sin."""
     if isinstance(x, Dfloat):
         return Dfloat(math.sin(x.x), x.dx * math.cos(x.x))
     else:
@@ -87,6 +95,7 @@ def sin(x):
 
 
 def cos(x):
+    """Define cos for Dfloat, else use math.cos."""
     if isinstance(x, Dfloat):
         return Dfloat(math.cos(x.x), -x.dx * math.sin(x.x))
     else:
@@ -94,6 +103,7 @@ def cos(x):
 
 
 def tan(x):
+    """Define tan for Dfloat, else use math.tan."""
     if isinstance(x, Dfloat):
         return Dfloat(math.tan(x.x), x.dx * (1 + (math.tan(x.x))**2))
     else:
@@ -101,6 +111,7 @@ def tan(x):
 
 
 def exp(x):
+    """Define exp for Dfloat, else use math.exp."""
     if isinstance(x, Dfloat):
         return Dfloat(math.exp(x.x), x.dx * math.exp(x.x))
     else:
@@ -108,6 +119,7 @@ def exp(x):
 
 
 def log(x):
+    """Define log for Dfloat, else use math.log."""
     if isinstance(x, Dfloat):
         return Dfloat(math.log(x.x), x.dx / x.x)
     else:
@@ -115,6 +127,7 @@ def log(x):
 
 
 def sinh(x):
+    """Define sinh for Dfloat, else use math.sinh."""
     if isinstance(x, Dfloat):
         return Dfloat(math.sinh(x.x), x.dx * math.cosh(x.x))
     else:
@@ -122,6 +135,7 @@ def sinh(x):
 
 
 def cosh(x):
+    """Define cosh for Dfloat, else use math.cosh."""
     if isinstance(x, Dfloat):
         return Dfloat(math.cosh(x.x), x.dx * math.sinh(x.x))
     else:
@@ -129,6 +143,7 @@ def cosh(x):
 
 
 def tanh(x):
+    """Define tanh for Dfloat, else use math.tanh."""
     if isinstance(x, Dfloat):
         return Dfloat(math.tanh(x.x), x.dx / (math.cosh(x.x))**2)
     else:
@@ -136,6 +151,7 @@ def tanh(x):
 
 
 def asin(x):
+    """Define asin for Dfloat, else use math.asin."""
     if isinstance(x, Dfloat):
         return Dfloat(math.asin(x.x), x.dx / math.sqrt(1 - (x.x**2)))
     else:
@@ -143,6 +159,7 @@ def asin(x):
 
 
 def acos(x):
+    """Define acos for Dfloat, else use math.acos."""
     if isinstance(x, Dfloat):
         return Dfloat(math.acos(x.x), - x.dx / math.sqrt(1 - (x.x**2)))
     else:
@@ -150,6 +167,7 @@ def acos(x):
 
 
 def atan(x):
+    """Define atan for Dfloat, else use math.atan."""
     if isinstance(x, Dfloat):
         return Dfloat(math.atan(x.x), x.dx / (1 + (x.x**2)))
     else:
@@ -157,6 +175,7 @@ def atan(x):
 
 
 def asinh(x):
+    """Define asinh for Dfloat, else use math.asinh."""
     if isinstance(x, Dfloat):
         return Dfloat(math.asinh(x.x), x.dx / math.sqrt(1 + (x.x**2)))
     else:
@@ -164,6 +183,7 @@ def asinh(x):
 
 
 def acosh(x):
+    """Define acosh for Dfloat, else use math.acosh."""
     if isinstance(x, Dfloat):
         return Dfloat(math.acosh(x.x),
                       x.dx / (math.sqrt(x.x - 1)*math.sqrt(x.x + 1)))
@@ -172,6 +192,7 @@ def acosh(x):
 
 
 def atanh(x):
+    """Define atanh for Dfloat, else use math.atanh."""
     if isinstance(x, Dfloat):
         return Dfloat(math.atanh(x.x), x.dx / (1 - (x.x**2)))
     else:
