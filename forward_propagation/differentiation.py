@@ -50,7 +50,7 @@ class Dfloat:
     @make_int_dfloat
     def __rsub__(self, other):
         """Reverse subtraction."""
-        return self - other
+        return other - self
 
     @make_int_dfloat
     def __mul__(self, other):
@@ -72,7 +72,7 @@ class Dfloat:
     @make_int_dfloat
     def __rtruediv__(self, other):
         """Reverse division."""
-        return self / other
+        return other / self
 
     @make_int_dfloat
     def __pow__(self, other):
@@ -83,7 +83,7 @@ class Dfloat:
     @make_int_dfloat
     def __rpow__(self, other):
         """Reverse exponentiation."""
-        return self ** other
+        return other ** self
 
 
 def sin(x):
