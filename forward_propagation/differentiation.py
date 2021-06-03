@@ -186,7 +186,7 @@ def acosh(x):
     """Define acosh for Dfloat, else use math.acosh."""
     if isinstance(x, Dfloat):
         return Dfloat(math.acosh(x.x),
-                      x.dx / (math.sqrt(x.x - 1)*math.sqrt(x.x + 1)))
+                      x.dx / (math.sqrt(x.x - 1) * math.sqrt(x.x + 1)))
     else:
         return math.acosh(x)
 
