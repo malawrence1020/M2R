@@ -1,4 +1,4 @@
-"""A first attempt at implementing forward-propagation differentiation."""
+"""An implementation of tangent-linear algorithmic differentiation."""
 import math
 from functools import wraps
 from numbers import Number
