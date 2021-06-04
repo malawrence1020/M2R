@@ -173,7 +173,20 @@ def test_hyp(f8, y8):
          math.sqrt(1 + cos(3.5) ** 2))),
         (acosh(3 * tanh(x4)), Dfloat(acosh(3 * tanh(2)), 3 / (2 * cosh(2) ** 2
          * (math.sqrt(3 * tanh(2) - 1) * math.sqrt(3 * tanh(2) + 1))))),
-        (atanh(x2 / x3), Dfloat(atanh(6/7), 2 / (49 * (1 - 36/49))))
+        (atanh(x2 / x3), Dfloat(atanh(6/7), 2 / (49 * (1 - 36/49)))),
+        (asinh(acos(x1 / x2)) ** (acosh(asin(log(x3 - 1))) *
+         atanh(atan(sin(x4) - cos(x4)))),
+         Dfloat(asinh(acos(2/3)) ** (acosh(asin(log(2.5))) *
+                atanh(atan(sin(2) - cos(2)))),
+         (asinh(acos(2/3)) ** (acosh(asin(log(2.5))) *
+          atanh(atan(sin(2) - cos(2))))) *
+         ((acosh(asin(log(2.5))) * atanh(atan(sin(2) - cos(2)))) * -1 /
+          (asinh(acos(2/3)) * math.sqrt(45) * math.sqrt(1 + acos(2/3) ** 2))
+          + log(asinh(acos(2/3))) * (atanh(atan(sin(2) - cos(2))) /
+          (2.5 * math.sqrt(1 - log(2.5) ** 2) * math.sqrt(asin(log(2.5)) - 1)
+           * math.sqrt(asin(log(2.5)) + 1)) + acosh(asin(log(2.5))) *
+           (cos(2) + sin(2)) / (2 * (1 + (sin(2) - cos(2)) ** 2) *
+                                (1 - (atan(sin(2) - cos(2)) ** 2)))))))
     )
 )
 def test_inv(f9, y9):
