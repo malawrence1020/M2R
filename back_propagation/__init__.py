@@ -1,1 +1,1 @@
-from .adjoint import (AdjFloat) # noqa F401
+from .adjoint import (AdjFloat, AddBlock, clear_tape) # noqa F401
