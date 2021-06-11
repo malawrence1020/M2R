@@ -277,6 +277,70 @@ class PowBlock(Block):
                             self.ops[0].val ** self.ops[1].val)
 
 
+class SinBlock(Block):
+    """Log a sin operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj += math.cos(self.ops.val) * self.result.adj
+
+
+class CosBlock(Block):
+    """Log a cos operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj -= math.sin(self.ops.val) * self.result.adj
+
+
+class TanBlock(Block):
+    """Log a tan operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj += (1 + (math.tan(self.ops.val))**2) * self.result.adj
+
+
+class ExpBlock(Block):
+    """Log an exp operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj += math.exp(self.ops.val) * self.result.adj
+
+
+class LogBlock(Block):
+    """Log a log operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj += self.result.adj / self.ops.val
+
+
+class SinhBlock(Block):
+    """Log a sinh operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj += math.cosh(self.ops.val) * self.result.adj
+
+
+class CoshBlock(Block):
+    """Log a cosh operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj += math.sinh(self.ops.val) * self.result.adj
+
+
+class TanhBlock(Block):
+    """Log a tanh operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj += self.result.adj / (math.cosh(self.ops.val) ** 2)
+
+
 def clear_tape():
     """Clear the tape to allow for a new AdjFloat calculation to be run."""
     tape = [] # noqa F841
