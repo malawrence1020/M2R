@@ -147,8 +147,9 @@ class DivBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops[0].adj += 1*self.result.adj
-        self.ops[1].adj -= 1*self.result.adj
+        self.ops[0].adj += self.result.adj / self.ops[1].val
+        self.ops[1].adj -= (self.ops[0].adj * self.result.adj /
+                            (self.ops[1].adj ** 2))
 
 
 class PowBlock(Block):
@@ -156,8 +157,11 @@ class PowBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops[0].adj += 1*self.result.adj
-        self.ops[1].adj -= 1*self.result.adj
+        self.ops[0].adj += (log(self.ops[0].val) * self.result.adj *
+                            self.ops[0].val ** self.ops[1].val)
+        self.ops[1].adj += ((self.ops[1].val / self.ops[0].val) *
+                            self.result.adj *
+                            self.ops[0].val ** self.ops[1].val)
 
 
 def clear_tape():
