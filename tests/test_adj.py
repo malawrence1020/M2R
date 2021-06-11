@@ -70,3 +70,16 @@ def test_mul(f3, y3):
     """Test multiplication on AdjFloat."""
     clear_tape()
     assert allclose(f3, y3)
+
+
+@pytest.mark.parametrize(
+    "f4, y4", (
+        ((x1 / 2).derivative(x1, x3), (0.5, 0)),
+        ((3 / x2).derivative(x1, x2), (0, -1/3)),
+        (((x4 / 2) / x5).derivative(x4, x5), (1/6, -1/3)),
+    )
+)
+def test_div(f4, y4):
+    """Test division on AdjFloat."""
+    clear_tape()
+    assert allclose(f4, y4)

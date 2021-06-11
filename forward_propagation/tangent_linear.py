@@ -4,7 +4,7 @@ from functools import wraps
 from numbers import Number
 
 
-def dealing_with_other_types(meth):
+def deal_with_other_types(meth):
     """Cast the second argument of a method to Dfloat when needed."""
     @wraps(meth)
     def fn(self, other):
@@ -32,55 +32,55 @@ class Dfloat:
         return (self.__class__.__name__ + "(" + str(self.x) +
                 "," + str(self.dx) + ")")
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __add__(self, other):
         """Implement addition."""
         return type(self)(self.x + other.x, self.dx + other.dx)
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __radd__(self, other):
         """Reverse addition."""
         return self + other
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __sub__(self, other):
         """Implement subtraction."""
         return type(self)(self.x - other.x, self.dx - other.dx)
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __rsub__(self, other):
         """Reverse subtraction."""
         return other - self
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __mul__(self, other):
         """Implement multiplication."""
         return type(self)(self.x * other.x,
                           other.x * self.dx + self.x * other.dx)
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __rmul__(self, other):
         """Reverse multiplication."""
         return self * other
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __truediv__(self, other):
         """Implement division."""
         return type(self)(self.x / other.x, (other.x * self.dx -
                           self.x * other.dx) / (other.x ** 2))
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __rtruediv__(self, other):
         """Reverse division."""
         return other / self
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __pow__(self, other):
         """Implement exponentiation."""
         return type(self)(self.x ** other.x, (self.x ** other.x) * (other.dx
                           * log(self.x) + (other.x * self.dx) / self.x))
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __rpow__(self, other):
         """Reverse exponentiation."""
         return other ** self

@@ -4,7 +4,7 @@ from functools import wraps
 from numbers import Number
 
 
-def dealing_with_other_types(meth):
+def deal_with_other_types(meth):
     """Cast the second argument of a method to AdjFloat when needed."""
     @wraps(meth)
     def fn(self, other):
@@ -46,68 +46,68 @@ class AdjFloat:
             block.compute_adjoint()
         return tuple(v.adj for v in vars)
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __add__(self, other):
         """Implement addition."""
         result = type(self)(self.val + other.val, 0)
         tape.append(AddBlock(result, self, other))
         return result
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __radd__(self, other):
         """Reverse addition."""
         return self + other
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __sub__(self, other):
         """Implement subtraction."""
         result = type(self)(self.val - other.val, 0)
         tape.append(SubBlock(result, self, other))
         return result
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __rsub__(self, other):
         """Reverse subtraction."""
         return other - self
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __mul__(self, other):
         """Implement multiplication."""
         result = type(self)(self.val * other.val, 0)
         tape.append(MulBlock(result, self, other))
         return result
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __rmul__(self, other):
         """Reverse multiplication."""
         return self * other
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __truediv__(self, other):
         """Implement division."""
         result = type(self)(self.val / other.val, 0)
         tape.append(DivBlock(result, self, other))
         return result
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __rtruediv__(self, other):
         """Reverse division."""
         return other / self
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __pow__(self, other):
         """Implement subtraction."""
         result = type(self)(self.val ** other.val, 0)
         tape.append(PowBlock(result, self, other))
         return result
 
-    @dealing_with_other_types
+    @deal_with_other_types
     def __rpow__(self, other):
         """Reverse exponentiation."""
         return other ** self
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def sin(x):
     """Implement sin for AdjFloat."""
     result = type(x)(math.sin(x.val), 0)
@@ -115,7 +115,7 @@ def sin(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def cos(x):
     """Implement cos for AdjFloat."""
     result = type(x)(math.cos(x.val), 0)
@@ -123,7 +123,7 @@ def cos(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def tan(x):
     """Implement tan for AdjFloat."""
     result = type(x)(math.tan(x.val), 0)
@@ -131,7 +131,7 @@ def tan(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def exp(x):
     """Implement exp for AdjFloat."""
     result = type(x)(math.exp(x.val), 0)
@@ -139,7 +139,7 @@ def exp(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def log(x):
     """Implement log for AdjFloat."""
     result = type(x)(math.log(x.val), 0)
@@ -147,7 +147,7 @@ def log(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def sinh(x):
     """Implement sinh for AdjFloat."""
     result = type(x)(math.sinh(x.val), 0)
@@ -155,7 +155,7 @@ def sinh(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def cosh(x):
     """Implement cosh for AdjFloat."""
     result = type(x)(math.cosh(x.val), 0)
@@ -163,7 +163,7 @@ def cosh(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def tanh(x):
     """Implement tanh for AdjFloat."""
     result = type(x)(math.tanh(x.val), 0)
@@ -171,7 +171,7 @@ def tanh(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def asin(x):
     """Implement asin for AdjFloat."""
     result = type(x)(math.asin(x.val), 0)
@@ -179,7 +179,7 @@ def asin(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def acos(x):
     """Implement acos for AdjFloat."""
     result = type(x)(math.acos(x.val), 0)
@@ -187,7 +187,7 @@ def acos(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def atan(x):
     """Implement atan for AdjFloat."""
     result = type(x)(math.atan(x.val), 0)
@@ -195,7 +195,7 @@ def atan(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def asinh(x):
     """Implement asinh for AdjFloat."""
     result = type(x)(math.asinh(x.val), 0)
@@ -203,7 +203,7 @@ def asinh(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def acosh(x):
     """Implement acosh for AdjFloat."""
     result = type(x)(math.acosh(x.val), 0)
@@ -211,7 +211,7 @@ def acosh(x):
     return result
 
 
-@dealing_with_other_types
+@deal_with_other_types
 def atanh(x):
     """Implement atanh for AdjFloat."""
     result = type(x)(math.atanh(x.val), 0)
@@ -261,8 +261,8 @@ class DivBlock(Block):
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
         self.ops[0].adj += self.result.adj / self.ops[1].val
-        self.ops[1].adj -= (self.ops[0].adj * self.result.adj /
-                            (self.ops[1].adj ** 2))
+        self.ops[1].adj -= (self.ops[0].val * self.result.adj /
+                            (self.ops[1].val ** 2))
 
 
 class PowBlock(Block):
@@ -270,10 +270,10 @@ class PowBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops[0].adj += (log(self.ops[0].val) * self.result.adj *
-                            self.ops[0].val ** self.ops[1].val)
-        self.ops[1].adj += ((self.ops[1].val / self.ops[0].val) *
+        self.ops[0].adj += ((self.ops[1].val / self.ops[0].val) *
                             self.result.adj *
+                            self.ops[0].val ** self.ops[1].val)
+        self.ops[1].adj += (log(self.ops[0].val) * self.result.adj *
                             self.ops[0].val ** self.ops[1].val)
 
 
@@ -282,7 +282,7 @@ class SinBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj += math.cos(self.ops.val) * self.result.adj
+        self.ops[0].adj += math.cos(self.ops[0].val) * self.result.adj
 
 
 class CosBlock(Block):
@@ -290,7 +290,7 @@ class CosBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj -= math.sin(self.ops.val) * self.result.adj
+        self.ops[0].adj -= math.sin(self.ops[0].val) * self.result.adj
 
 
 class TanBlock(Block):
@@ -298,7 +298,8 @@ class TanBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj += (1 + (math.tan(self.ops.val))**2) * self.result.adj
+        self.ops[0].adj += ((1 + (math.tan(self.ops[0].val)) ** 2) *
+                            self.result.adj)
 
 
 class ExpBlock(Block):
@@ -306,7 +307,7 @@ class ExpBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj += math.exp(self.ops.val) * self.result.adj
+        self.ops[0].adj += math.exp(self.ops[0].val) * self.result.adj
 
 
 class LogBlock(Block):
@@ -314,7 +315,7 @@ class LogBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj += self.result.adj / self.ops.val
+        self.ops[0].adj += self.result.adj / self.ops[0].val
 
 
 class SinhBlock(Block):
@@ -322,7 +323,7 @@ class SinhBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj += math.cosh(self.ops.val) * self.result.adj
+        self.ops[0].adj += math.cosh(self.ops[0].val) * self.result.adj
 
 
 class CoshBlock(Block):
@@ -330,7 +331,7 @@ class CoshBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj += math.sinh(self.ops.val) * self.result.adj
+        self.ops[0].adj += math.sinh(self.ops[0].val) * self.result.adj
 
 
 class TanhBlock(Block):
@@ -338,7 +339,7 @@ class TanhBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj += self.result.adj / (math.cosh(self.ops.val) ** 2)
+        self.ops[0].adj += self.result.adj / (math.cosh(self.ops[0].val) ** 2)
 
 
 class AsinBlock(Block):
@@ -346,7 +347,8 @@ class AsinBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj += self.result.adj / math.sqrt(1 - (self.ops.val ** 2))
+        self.ops[0].adj += (self.result.adj /
+                            math.sqrt(1 - (self.ops[0].val ** 2)))
 
 
 class AcosBlock(Block):
@@ -354,7 +356,8 @@ class AcosBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj -= self.result.adj / math.sqrt(1 - (self.ops.val ** 2))
+        self.ops[0].adj -= (self.result.adj /
+                            math.sqrt(1 - (self.ops[0].val ** 2)))
 
 
 class AtanBlock(Block):
@@ -362,7 +365,7 @@ class AtanBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj += self.result.adj / (1 + (self.ops.val ** 2))
+        self.ops[0].adj += self.result.adj / (1 + (self.ops[0].val ** 2))
 
 
 class AsinhBlock(Block):
@@ -370,7 +373,8 @@ class AsinhBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj += self.result.adj / math.sqrt(1 + (self.ops.val ** 2))
+        self.ops[0].adj += (self.result.adj /
+                            math.sqrt(1 + (self.ops[0].val ** 2)))
 
 
 class AcoshBlock(Block):
@@ -378,8 +382,8 @@ class AcoshBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj += (self.result.adj / (math.sqrt(self.ops.val - 1) *
-                         math.sqrt(self.ops.val + 1)))
+        self.ops[0].adj += (self.result.adj / (math.sqrt(self.ops[0].val - 1) *
+                            math.sqrt(self.ops[0].val + 1)))
 
 
 class AtanhBlock(Block):
@@ -387,7 +391,7 @@ class AtanhBlock(Block):
 
     def compute_adjoint(self):
         """Pass the result of the chain rule back to AdjFloat."""
-        self.ops.adj += self.result.adj / (1 - (self.ops.val ** 2))
+        self.ops[0].adj += self.result.adj / (1 - (self.ops[0].val ** 2))
 
 
 def clear_tape():
