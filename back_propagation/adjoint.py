@@ -341,6 +341,55 @@ class TanhBlock(Block):
         self.ops.adj += self.result.adj / (math.cosh(self.ops.val) ** 2)
 
 
+class AsinBlock(Block):
+    """Log an arcsin operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj += self.result.adj / math.sqrt(1 - (self.ops.val ** 2))
+
+
+class AcosBlock(Block):
+    """Log an arccos operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj -= self.result.adj / math.sqrt(1 - (self.ops.val ** 2))
+
+
+class AtanBlock(Block):
+    """Log an arctan operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj += self.result.adj / (1 + (self.ops.val ** 2))
+
+
+class AsinhBlock(Block):
+    """Log an arsinh operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj += self.result.adj / math.sqrt(1 + (self.ops.val ** 2))
+
+
+class AcoshBlock(Block):
+    """Log an arcosh operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj += (self.result.adj / (math.sqrt(self.ops.val - 1) *
+                         math.sqrt(self.ops.val + 1)))
+
+
+class AtanhBlock(Block):
+    """Log an artanh operation onto the tape."""
+
+    def compute_adjoint(self):
+        """Pass the result of the chain rule back to AdjFloat."""
+        self.ops.adj += self.result.adj / (1 - (self.ops.val ** 2))
+
+
 def clear_tape():
     """Clear the tape to allow for a new AdjFloat calculation to be run."""
     tape = [] # noqa F841
