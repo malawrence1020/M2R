@@ -76,7 +76,9 @@ def test_mul(f3, y3):
     "f4, y4", (
         ((x1 / 2).derivative(x1, x3), (0.5, 0)),
         ((3 / x2).derivative(x1, x2), (0, -1/3)),
-        (((x4 / 2) / x5).derivative(x4, x5), (1/6, -1/3)),
+        ((x3 / x4).derivative(x3, x4, x5), (1/2, -0.875, 0)),
+        (((x4 / 2) / x5).derivative(x3, x4, x5), (0, 1/6, -1/9)),
+        (((x1 + x2) / (x4 * 2)).derivative(x1, x3, x4), (1/4, 0, -5/8)),
     )
 )
 def test_div(f4, y4):
