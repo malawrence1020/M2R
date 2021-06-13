@@ -19,6 +19,21 @@ def deal_with_other_types(meth):
     return fn
 
 
+def deal_with_other_types2(meth):
+    """Cast the argument of a method to AdjFloat when needed."""
+    @wraps(meth)
+    def fn(self):
+        if not isinstance(self, AdjFloat):
+            if isinstance(self, Number):
+                self = AdjFloat(self, 0)
+            else:
+                raise TypeError(
+                    (f"Can only operate on a AdjFloat or a Number, "
+                     f"not a {type(self).__name__}"))
+        return meth(self)
+    return fn
+
+
 class AdjFloat:
     """Implement backward-propagation differentiation."""
 
@@ -107,7 +122,7 @@ class AdjFloat:
         return other ** self
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def sin(x):
     """Implement sin for AdjFloat."""
     result = type(x)(math.sin(x.val), 0)
@@ -115,7 +130,7 @@ def sin(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def cos(x):
     """Implement cos for AdjFloat."""
     result = type(x)(math.cos(x.val), 0)
@@ -123,7 +138,7 @@ def cos(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def tan(x):
     """Implement tan for AdjFloat."""
     result = type(x)(math.tan(x.val), 0)
@@ -131,7 +146,7 @@ def tan(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def exp(x):
     """Implement exp for AdjFloat."""
     result = type(x)(math.exp(x.val), 0)
@@ -139,7 +154,7 @@ def exp(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def log(x):
     """Implement log for AdjFloat."""
     result = type(x)(math.log(x.val), 0)
@@ -147,7 +162,7 @@ def log(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def sinh(x):
     """Implement sinh for AdjFloat."""
     result = type(x)(math.sinh(x.val), 0)
@@ -155,7 +170,7 @@ def sinh(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def cosh(x):
     """Implement cosh for AdjFloat."""
     result = type(x)(math.cosh(x.val), 0)
@@ -163,7 +178,7 @@ def cosh(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def tanh(x):
     """Implement tanh for AdjFloat."""
     result = type(x)(math.tanh(x.val), 0)
@@ -171,7 +186,7 @@ def tanh(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def asin(x):
     """Implement asin for AdjFloat."""
     result = type(x)(math.asin(x.val), 0)
@@ -179,7 +194,7 @@ def asin(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def acos(x):
     """Implement acos for AdjFloat."""
     result = type(x)(math.acos(x.val), 0)
@@ -187,7 +202,7 @@ def acos(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def atan(x):
     """Implement atan for AdjFloat."""
     result = type(x)(math.atan(x.val), 0)
@@ -195,7 +210,7 @@ def atan(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def asinh(x):
     """Implement asinh for AdjFloat."""
     result = type(x)(math.asinh(x.val), 0)
@@ -203,7 +218,7 @@ def asinh(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def acosh(x):
     """Implement acosh for AdjFloat."""
     result = type(x)(math.acosh(x.val), 0)
@@ -211,7 +226,7 @@ def acosh(x):
     return result
 
 
-@deal_with_other_types
+@deal_with_other_types2
 def atanh(x):
     """Implement atanh for AdjFloat."""
     result = type(x)(math.atanh(x.val), 0)
@@ -223,9 +238,14 @@ class Block:
     """Log an operation onto the tape to implement chain rule in reverse."""
 
     def __init__(self, result, *ops):
-        """Initialise AdjFloat."""
+        """Initialise Block."""
         self.result = result
         self.ops = ops
+
+    def __repr__(self):
+        """Representation of Block."""
+        return (self.__class__.__name__ + "(" + str(self.result) +
+                "," + str(self.ops) + ")")
 
 
 class AddBlock(Block):
@@ -273,7 +293,7 @@ class PowBlock(Block):
         self.ops[0].adj += ((self.ops[1].val / self.ops[0].val) *
                             self.result.adj *
                             self.ops[0].val ** self.ops[1].val)
-        self.ops[1].adj += (log(self.ops[0].val) * self.result.adj *
+        self.ops[1].adj += (math.log(self.ops[0].val) * self.result.adj *
                             self.ops[0].val ** self.ops[1].val)
 
 
